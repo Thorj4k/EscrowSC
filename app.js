@@ -1,12 +1,16 @@
 document.addEventListener('DOMContentLoaded', async () => {
   // Initialize Web3
-  if (window.ethereum) {
+  if (typeof window.ethereum !== 'undefined') {
     window.web3 = new Web3(window.ethereum);
-    await window.ethereum.enable();
-  } else if (window.web3) {
-    window.web3 = new Web3(window.web3.currentProvider);
+    try {
+      // Request account access if needed
+      await window.ethereum.enable();
+      console.log('Connected to MetaMask!');
+    } catch (error) {
+      console.error('User denied account access:', error);
+    }
   } else {
-    console.error('Web3 not found. Please use a web3-enabled browser.');
+    console.error('MetaMask not detected. Please install MetaMask to use this DApp.');
   }
 
   // Contract Address and ABI (Replace with your actual contract details)
@@ -40,7 +44,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Deposit funds into the current deal
   window.depositFunds = async () => {
     const amount = parseFloat(prompt('Enter the amount to deposit (ETH):'));
-    await escrowContract.methods.depositFunds(currentDealAddress).send({ from: window.web3.eth.defaultAccount, value: window.web3.utils.toWei(amount.toString(), 'ether') });
+    await escrowContract.methods.depositFunds(currentDealAddress).send({
+      from: window.web3.eth.defaultAccount,
+      value: window.web3.utils.toWei(amount.toString(), 'ether')
+    });
     console.log('Funds deposited successfully!');
     displayDealDetails();
   };
