@@ -480,6 +480,17 @@ window.onload = async () => {
   }
 }
 
+// Function to create a deal (assuming it's not defined in your provided code)
+async function createDeal(contractorAddress) {
+  try {
+    const transaction = await escrowContract.createDeal(contractorAddress);
+    await transaction.wait();
+    console.log('Deal created successfully');
+  } catch (error) {
+    console.error('Error creating deal:', error.message);
+  }
+}
+
 async function addFunds(dealAddress, amount) {
   try {
     const transaction = await escrowContract.addFunds(dealAddress, { value: ethers.utils.parseEther(amount.toString()) });
