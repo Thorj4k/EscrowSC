@@ -16,19 +16,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Function to connect the wallet
-  async function connectWallet() {
-    try {
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      console.log('Connected to MetaMask!');
-      updateConnectButtonStatus(true); // Update button status to "Connected"
-      web3 = new Web3(window.ethereum);
-      // Initialize your contract and other functionality here
-      dealDetailsSection.style.display = 'block'; // Show the deal details section
-    } catch (error) {
-      console.error('User denied account access:', error);
-      updateConnectButtonStatus(false); // Update button status to "Connect Wallet"
-    }
+window.connectWallet = async () => {
+  try {
+    await window.ethereum.enable();
+    console.log('Connected to MetaMask!');
+    updateConnectButtonStatus(true); // Update button status to "Connected"
+  } catch (error) {
+    console.error('User denied account access:', error);
+    updateConnectButtonStatus(false); // Update button status to "Connect Wallet"
   }
+};
+
+// Create a new deal
+window.createDeal = async () => {
+  // Your code for creating a deal
+};
+
+// Deposit funds into the current deal
+window.depositFunds = async () => {
+  // Your code for depositing funds
+};
+
+// Add a note to the current deal
+window.addNote = () => {
+  // Your code for adding a note
+};
 
   // Event listener for the Connect Wallet button
   connectButton.addEventListener('click', connectWallet);
