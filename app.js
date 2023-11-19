@@ -461,23 +461,24 @@ const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 const escrowContract = new ethers.Contract(contractAddress, contractABI, signer);
 
-async function createDeal(contractorWallet) {
+// Function to connect the wallet
+async function connectWallet() {
   try {
-    const transaction = await escrowContract.createDeal(contractorWallet);
-    await transaction.wait();
-    console.log('Deal created successfully');
+    // Prompt user to connect their wallet
+    await window.ethereum.enable();
+    console.log('Wallet connected successfully');
   } catch (error) {
-    console.error('Error creating deal:', error.message);
+    console.error('Error connecting wallet:', error.message);
   }
 }
 
-async function depositFunds(dealAddress, amount) {
-  try {
-    const transaction = await escrowContract.depositFunds(dealAddress, { value: ethers.utils.parseEther(amount.toString()) });
-    await transaction.wait();
-    console.log('Funds deposited successfully');
-  } catch (error) {
-    console.error('Error depositing funds:', error.message);
+// Call the connectWallet function when the page loads
+window.onload = async () => {
+  // Check if the user has MetaMask or a compatible wallet installed
+  if (window.ethereum) {
+    await connectWallet();
+  } else {
+    console.error('MetaMask or a compatible wallet is not detected');
   }
 }
 
