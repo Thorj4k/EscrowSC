@@ -14,8 +14,9 @@
       <button id="connectButton" onclick="connectWallet()">Connect Wallet</button>
     </header>
 
-    <section id="dealCreation" class="card">
-      <h2>Create a New Deal</h2>
+    <!-- Create New Deal Section -->
+    <section id="createDealSection" class="card">
+      <h2>Create New Deal</h2>
       <div class="form-group">
         <label for="contractorAddress">Contractor Address:</label>
         <input type="text" id="contractorAddress" />
@@ -23,6 +24,17 @@
       <button onclick="createDeal()">Create Deal</button>
     </section>
 
+    <!-- Retrieve Existing Deal Section -->
+    <section id="retrieveDealSection" class="card">
+      <h2>Retrieve Existing Deal</h2>
+      <div class="form-group">
+        <label for="dealAddress">Deal Address:</label>
+        <input type="text" id="dealAddress" />
+      </div>
+      <button onclick="retrieveDeal()">Retrieve Deal</button>
+    </section>
+
+    <!-- Shared Deal Details Section -->
     <section id="dealDetails" class="card" style="display: none;">
       <h2>Deal Details</h2>
       <div class="details-group">
@@ -38,22 +50,6 @@
         <button onclick="addNote()">Add Note</button>
         <!-- Add more buttons for other actions -->
       </div>
-    </section>
-
-    <section id="dealNotes" class="card" style="display: none;">
-      <h2>Deal Notes</h2>
-      <div class="form-group">
-        <label for="noteType">Note Type:</label>
-        <select id="noteType">
-          <option value="Deal">Deal</option>
-          <option value="Progress">Progress</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="note">Note:</label>
-        <textarea id="note"></textarea>
-      </div>
-      <button onclick="updateNotes()">Update Notes</button>
     </section>
   </div>
 
