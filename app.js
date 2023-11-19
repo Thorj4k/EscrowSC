@@ -1,8 +1,11 @@
+import { ethers } from 'ethers';
+
 document.addEventListener('DOMContentLoaded', async () => {
   const connectButton = document.getElementById('connectButton');
   const dealDetailsSection = document.getElementById('dealDetails');
 
-  let web3;
+  let provider;
+  let signer;
 
   // Function to update the connect button status
   function updateConnectButtonStatus(connected) {
@@ -16,31 +19,51 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Function to connect the wallet
-window.connectWallet = async () => {
-  try {
-    await window.ethereum.enable();
-    console.log('Connected to MetaMask!');
-    updateConnectButtonStatus(true); // Update button status to "Connected"
-  } catch (error) {
-    console.error('User denied account access:', error);
-    updateConnectButtonStatus(false); // Update button status to "Connect Wallet"
-  }
-};
+  window.connectWallet = async () => {
+    try {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      console.log('Connected to MetaMask!');
+      updateConnectButtonStatus(true); // Update button status to "Connected"
+    } catch (error) {
+      console.error('User denied account access:', error);
+      updateConnectButtonStatus(false); // Update button status to "Connect Wallet"
+    }
+  };
 
-// Create a new deal
-window.createDeal = async () => {
-  // Your code for creating a deal
-};
+  // Create a new deal
+  window.createDeal = async () => {
+    try {
+      // Your code for creating a deal
+      console.log('Deal created successfully!');
+    } catch (error) {
+      console.error('Error creating deal:', error);
+    }
+  };
 
-// Deposit funds into the current deal
-window.depositFunds = async () => {
-  // Your code for depositing funds
-};
+  // Deposit funds into the current deal
+  window.depositFunds = async () => {
+    try {
+      // Your code for depositing funds
+      console.log('Funds deposited successfully!');
+    } catch (error) {
+      console.error('Error depositing funds:', error);
+    }
+  };
 
-// Add a note to the current deal
-window.addNote = () => {
-  // Your code for adding a note
-};
+  // Add a note to the current deal
+  window.addNote = () => {
+    // Your code for adding a note
+  };
+
+  // Update notes for the current deal
+  window.updateNotes = async () => {
+    try {
+      // Your code for updating notes
+      console.log('Notes updated successfully!');
+    } catch (error) {
+      console.error('Error updating notes:', error);
+    }
+  };
 
   // Event listener for the Connect Wallet button
   connectButton.addEventListener('click', connectWallet);
@@ -48,7 +71,6 @@ window.addNote = () => {
   // Example contract address and ABI (replace with your actual contract details)
   const contractAddress = '0xBf354DF06A9b61298F6D7C17647983fc4658F9F1';
   const contractAbi = [
-   [
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -501,43 +523,19 @@ window.addNote = () => {
 	}
 ]
 
+; // Your contract ABI goes here
 
-  ];
+  // Initialize ethers.js provider and signer
+  provider = new ethers.providers.Web3Provider(window.ethereum);
+  signer = provider.getSigner();
 
-  const escrowContract = new window.web3.eth.Contract(contractAbi, contractAddress);
+  const escrowContract = new ethers.Contract(contractAddress, contractAbi, signer);
   let currentDealAddress = '';
 
   // Helper function to display details including the most recent note
   const displayDealDetails = async () => {
     // ... (your existing code for displaying deal details)
   };
-
-  // Function to connect the wallet (added to the global window object)
-  window.connectWallet = async () => {
-    // ... (your existing code for connecting the wallet)
-  };
-
-  // Create a new deal (added to the global window object)
-  window.createDeal = async () => {
-    // ... (your existing code for creating a new deal)
-  };
-
-  // Deposit funds into the current deal (added to the global window object)
-  window.depositFunds = async () => {
-    // ... (your existing code for depositing funds)
-  };
-
-  // Add a note to the current deal (added to the global window object)
-  window.addNote = () => {
-    // ... (your existing code for adding a note)
-  };
-
-  // Update notes for the current deal (added to the global window object)
-  window.updateNotes = async () => {
-    // ... (your existing code for updating notes)
-  };
-
-  // Additional functions for other actions can be added similarly
 
   // Example: Retrieve and display details of a specific deal
   currentDealAddress = '0xYourDealAddress'; // Replace with an actual deal address
