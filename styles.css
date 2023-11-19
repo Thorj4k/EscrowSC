@@ -63,7 +63,7 @@ h1 {
 
 .advertising-banner-top,
 .advertising-banner-bottom {
-  padding: 8px;
+  padding: 16px;
   font-size: 18px; /* Double the font size */
   background-color: #f8f9fa;
   color: #343a40;
