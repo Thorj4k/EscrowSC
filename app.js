@@ -1,5 +1,3 @@
-const { ethers } = require('ethers');
-
 // Replace these values with your actual contract address and ABI
 const contractAddress = '0xBf354DF06A9b61298F6D7C17647983fc4658F9F1';
 const contractABI = [
