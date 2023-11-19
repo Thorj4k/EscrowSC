@@ -1,76 +1,8 @@
-import { ethers } from 'ethers';
+const { ethers } = require('ethers');
 
-document.addEventListener('DOMContentLoaded', async () => {
-  const connectButton = document.getElementById('connectButton');
-  const dealDetailsSection = document.getElementById('dealDetails');
-
-  let provider;
-  let signer;
-
-  // Function to update the connect button status
-  function updateConnectButtonStatus(connected) {
-    if (connected) {
-      connectButton.textContent = 'Connected';
-      connectButton.disabled = true;
-    } else {
-      connectButton.textContent = 'Connect Wallet';
-      connectButton.disabled = false;
-    }
-  }
-
-  // Function to connect the wallet
-  async function connectWallet() {
-    try {
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      console.log('Connected to MetaMask!');
-      updateConnectButtonStatus(true); // Update button status to "Connected"
-    } catch (error) {
-      console.error('User denied account access:', error);
-      updateConnectButtonStatus(false); // Update button status to "Connect Wallet"
-    }
-  };
-
-  // Create a new deal
-  window.createDeal = async () => {
-    try {
-      // Your code for creating a deal
-      console.log('Deal created successfully!');
-    } catch (error) {
-      console.error('Error creating deal:', error);
-    }
-  };
-
-  // Deposit funds into the current deal
-  window.depositFunds = async () => {
-    try {
-      // Your code for depositing funds
-      console.log('Funds deposited successfully!');
-    } catch (error) {
-      console.error('Error depositing funds:', error);
-    }
-  };
-
-  // Add a note to the current deal
-  window.addNote = () => {
-    // Your code for adding a note
-  };
-
-  // Update notes for the current deal
-  window.updateNotes = async () => {
-    try {
-      // Your code for updating notes
-      console.log('Notes updated successfully!');
-    } catch (error) {
-      console.error('Error updating notes:', error);
-    }
-  };
-
-  // Event listener for the Connect Wallet button
-  connectButton.addEventListener('click', connectWallet);
-
-  // Example contract address and ABI (replace with your actual contract details)
-  const contractAddress = '0xBf354DF06A9b61298F6D7C17647983fc4658F9F1';
-  const contractAbi = [
+// Replace these values with your actual contract address and ABI
+const contractAddress = '0xBf354DF06A9b61298F6D7C17647983fc4658F9F1';
+const contractABI = [
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -523,21 +455,101 @@ document.addEventListener('DOMContentLoaded', async () => {
 	}
 ]
 
-; // Your contract ABI goes here
+;
 
-  // Initialize ethers.js provider and signer
-  provider = new ethers.providers.Web3Provider(window.ethereum);
-  signer = provider.getSigner();
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+const signer = provider.getSigner();
+const escrowContract = new ethers.Contract(contractAddress, contractABI, signer);
 
-  const escrowContract = new ethers.Contract(contractAddress, contractAbi, signer);
-  let currentDealAddress = '';
+async function createDeal(contractorWallet) {
+  try {
+    const transaction = await escrowContract.createDeal(contractorWallet);
+    await transaction.wait();
+    console.log('Deal created successfully');
+  } catch (error) {
+    console.error('Error creating deal:', error.message);
+  }
+}
 
-  // Helper function to display details including the most recent note
-  const displayDealDetails = async () => {
-    // ... (your existing code for displaying deal details)
-  };
+async function depositFunds(dealAddress, amount) {
+  try {
+    const transaction = await escrowContract.depositFunds(dealAddress, { value: ethers.utils.parseEther(amount.toString()) });
+    await transaction.wait();
+    console.log('Funds deposited successfully');
+  } catch (error) {
+    console.error('Error depositing funds:', error.message);
+  }
+}
 
-  // Example: Retrieve and display details of a specific deal
-  currentDealAddress = '0xYourDealAddress'; // Replace with an actual deal address
-  displayDealDetails();
-});
+async function addFunds(dealAddress, amount) {
+  try {
+    const transaction = await escrowContract.addFunds(dealAddress, { value: ethers.utils.parseEther(amount.toString()) });
+    await transaction.wait();
+    console.log('Funds added successfully');
+  } catch (error) {
+    console.error('Error adding funds:', error.message);
+  }
+}
+
+async function signDeal(dealAddress) {
+  try {
+    const transaction = await escrowContract.signDeal(dealAddress);
+    await transaction.wait();
+    console.log('Deal signed successfully');
+  } catch (error) {
+    console.error('Error signing deal:', error.message);
+  }
+}
+
+async function releaseFunds(dealAddress) {
+  try {
+    const transaction = await escrowContract.releaseFunds(dealAddress);
+    await transaction.wait();
+    console.log('Funds released successfully');
+  } catch (error) {
+    console.error('Error releasing funds:', error.message);
+  }
+}
+
+async function cancelDeal(dealAddress) {
+  try {
+    const transaction = await escrowContract.cancelDeal(dealAddress);
+    await transaction.wait();
+    console.log('Deal canceled successfully');
+  } catch (error) {
+    console.error('Error canceling deal:', error.message);
+  }
+}
+
+async function requestDispute(dealAddress) {
+  try {
+    const transaction = await escrowContract.requestDispute(dealAddress);
+    await transaction.wait();
+    console.log('Dispute requested successfully');
+  } catch (error) {
+    console.error('Error requesting dispute:', error.message);
+  }
+}
+
+async function resolveDispute(dealAddress, resolved) {
+  try {
+    const transaction = await escrowContract.resolveDispute(dealAddress, resolved);
+    await transaction.wait();
+    console.log('Dispute resolved successfully');
+  } catch (error) {
+    console.error('Error resolving dispute:', error.message);
+  }
+}
+
+// Replace 'YOUR_DEAL_ADDRESS' with the actual deal address
+const dealAddress = 'YOUR_DEAL_ADDRESS';
+
+// Examples of function calls
+createDeal('ContractorAddress'); // Replace 'ContractorAddress' with the actual contractor address
+depositFunds(dealAddress, 1); // Deposit 1 ether to the deal
+addFunds(dealAddress, 0.5); // Add 0.5 ether to the deal
+signDeal(dealAddress); // Sign the deal
+releaseFunds(dealAddress); // Release funds
+cancelDeal(dealAddress); // Cancel the deal
+requestDispute(dealAddress); // Request dispute
+resolveDispute(dealAddress, true); // Resolve dispute (true for resolved, false for not resolved)
