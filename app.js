@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Function to connect the wallet
-  window.connectWallet = async () => {
+  async function connectWallet() {
     try {
       await window.ethereum.request({ method: 'eth_requestAccounts' });
       console.log('Connected to MetaMask!');
