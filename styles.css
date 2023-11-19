@@ -67,6 +67,7 @@ h1 {
   font-size: 18px; /* Double the font size */
   background-color: #f8f9fa;
   color: #343a40;
+  margin-bottom: 20px;
   border-radius: 10px; /* Rounded corners */
 }
 
